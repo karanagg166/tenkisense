@@ -53,6 +53,17 @@ const translations: Record<Language, Record<string, string>> = {
         "about.limits": "API Rate Limits",
         "about.creator": "Created By",
         "about.footer": "Made with ❤️ for travelers",
+        "about.name": "Karan Agarwal",
+        "about.role": "Full-Stack Developer | Competitive Programmer",
+        "about.passion": "Built with passion",
+        "about.cities": "100+ Cities",
+        "about.cities.desc": "Comprehensive coverage of Japan and India",
+        "about.realtime": "Real-Time Data",
+        "about.realtime.desc": "Live weather updates every request",
+        "about.ai": "AI-Powered",
+        "about.ai.desc": "Smart responses using Cohere",
+        "about.friendly": "User Friendly",
+        "about.friendly.desc": "Natural language understanding",
     },
     ja: {
         // Navigation
@@ -94,6 +105,17 @@ const translations: Record<Language, Record<string, string>> = {
         "about.limits": "APIレート制限",
         "about.creator": "作成者",
         "about.footer": "旅行者のために❤️を込めて作成",
+        "about.name": "カラン・アガルワル",
+        "about.role": "フルスタック開発者 | 競技プログラマー",
+        "about.passion": "情熱を込めて構築",
+        "about.cities": "100以上の都市",
+        "about.cities.desc": "日本とインドを包括的にカバー",
+        "about.realtime": "リアルタイムデータ",
+        "about.realtime.desc": "リクエストごとにライブ天気更新",
+        "about.ai": "AI搭載",
+        "about.ai.desc": "Cohereによるスマートな応答",
+        "about.friendly": "ユーザーフレンドリー",
+        "about.friendly.desc": "自然言語理解",
     }
 };
 

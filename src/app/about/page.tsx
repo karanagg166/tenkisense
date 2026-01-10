@@ -16,10 +16,10 @@ export default function AboutPage() {
     ];
 
     const features = [
-        { icon: <Globe className="w-5 h-5" />, title: "100+ Cities", desc: "Comprehensive coverage of Japan and India" },
-        { icon: <Zap className="w-5 h-5" />, title: "Real-Time Data", desc: "Live weather updates every request" },
-        { icon: <Shield className="w-5 h-5" />, title: "AI-Powered", desc: "Smart responses using Cohere" },
-        { icon: <Heart className="w-5 h-5" />, title: "User Friendly", desc: "Natural language understanding" },
+        { icon: <Globe className="w-5 h-5" />, title: t("about.cities"), desc: t("about.cities.desc") },
+        { icon: <Zap className="w-5 h-5" />, title: t("about.realtime"), desc: t("about.realtime.desc") },
+        { icon: <Shield className="w-5 h-5" />, title: t("about.ai"), desc: t("about.ai.desc") },
+        { icon: <Heart className="w-5 h-5" />, title: t("about.friendly"), desc: t("about.friendly.desc") },
     ];
 
     const socialLinks = [
@@ -53,7 +53,7 @@ export default function AboutPage() {
                 <div className="text-center mb-16">
                     <div className={`inline-flex items-center gap-2 px-4 py-2 ${cardClass} border rounded-full text-sm ${mutedClass} mb-6`}>
                         <Heart className="w-4 h-4 text-pink-400" />
-                        Built with passion
+                        {t("about.passion")}
                     </div>
                     <h1 className="text-4xl md:text-5xl font-bold mb-4">
                         {t("about.title")} <span className="bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">TenkiSense</span>
@@ -122,8 +122,8 @@ export default function AboutPage() {
                         <div className="w-24 h-24 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center text-4xl font-bold text-white mb-4">
                             KA
                         </div>
-                        <h3 className="text-2xl font-bold mb-1">Karan Agarwal</h3>
-                        <p className={`${mutedClass} mb-6`}>Full-Stack Developer | Competitive Programmer</p>
+                        <h3 className="text-2xl font-bold mb-1">{t("about.name")}</h3>
+                        <p className={`${mutedClass} mb-6`}>{t("about.role")}</p>
 
                         {/* Social Links */}
                         <div className="grid grid-cols-3 gap-3">
