@@ -1,31 +1,33 @@
 "use client";
 import Link from "next/link";
-import { Cloud, MessageCircle, Info, Sparkles, MapPin, Shirt, Plane, Sun, Droplets, Wind } from "lucide-react";
+import { Cloud, MessageCircle, Info, Sparkles, MapPin, Shirt, Plane, Sun, Moon, Languages } from "lucide-react";
+import { useApp } from "@/context/AppContext";
 
 export default function Home() {
+  const { theme, language, toggleTheme, setLanguage, t } = useApp();
+
   const features = [
-    { icon: <Sun className="w-6 h-6" />, title: "Real-Time Weather", desc: "Live weather data for 100+ cities in Japan and India" },
-    { icon: <Shirt className="w-6 h-6" />, title: "Smart Clothing Tips", desc: "AI-powered outfit recommendations based on weather" },
-    { icon: <Plane className="w-6 h-6" />, title: "Travel Advice", desc: "Activity suggestions perfect for current conditions" },
-    { icon: <MessageCircle className="w-6 h-6" />, title: "Natural Chat", desc: "Just talk naturally - I understand context" },
+    { icon: <Sun className="w-6 h-6" />, title: t("feature.weather"), desc: t("feature.weather.desc") },
+    { icon: <Shirt className="w-6 h-6" />, title: t("feature.clothing"), desc: t("feature.clothing.desc") },
+    { icon: <Plane className="w-6 h-6" />, title: t("feature.travel"), desc: t("feature.travel.desc") },
+    { icon: <MessageCircle className="w-6 h-6" />, title: t("feature.chat"), desc: t("feature.chat.desc") },
   ];
 
-  const exampleQueries = [
-    "Weather in Tokyo",
-    "What should I wear in Mumbai?",
-    "Suggest activities in Kyoto",
-    "Is it good to visit Goa now?",
-    "Pack list for Kashmir in January",
-    "Compare Delhi and Bangalore weather",
-  ];
+  const exampleQueries = language === "en"
+    ? ["Weather in Tokyo", "What should I wear in Mumbai?", "Suggest activities in Kyoto", "Is it good to visit Goa now?", "Pack list for Kashmir in January"]
+    : ["東京の天気", "ムンバイで何を着るべき？", "京都のアクティビティを提案", "今ゴアを訪れるのは良い？", "1月のカシミール用荷物リスト"];
+
+  const bgClass = theme === "dark" ? "bg-[#0a0a0f]" : "bg-gray-50";
+  const textClass = theme === "dark" ? "text-white" : "text-gray-900";
+  const cardClass = theme === "dark" ? "bg-white/5 border-white/10 hover:bg-white/10" : "bg-white border-gray-200 hover:bg-gray-50 shadow-sm";
+  const mutedClass = theme === "dark" ? "text-neutral-400" : "text-gray-600";
 
   return (
-    <div className="min-h-screen bg-[#0a0a0f] text-white overflow-hidden">
+    <div className={`min-h-screen ${bgClass} ${textClass} overflow-hidden`}>
       {/* Animated Background */}
       <div className="fixed inset-0 pointer-events-none">
-        <div className="absolute top-0 left-1/4 w-[600px] h-[600px] bg-blue-500/20 rounded-full blur-[120px] animate-pulse" />
-        <div className="absolute bottom-0 right-1/4 w-[500px] h-[500px] bg-purple-500/20 rounded-full blur-[100px] animate-pulse" style={{ animationDelay: "1s" }} />
-        <div className="absolute top-1/2 right-0 w-[400px] h-[400px] bg-cyan-500/10 rounded-full blur-[80px] animate-pulse" style={{ animationDelay: "2s" }} />
+        <div className={`absolute top-0 left-1/4 w-[600px] h-[600px] ${theme === "dark" ? "bg-blue-500/20" : "bg-blue-500/10"} rounded-full blur-[120px] animate-pulse`} />
+        <div className={`absolute bottom-0 right-1/4 w-[500px] h-[500px] ${theme === "dark" ? "bg-purple-500/20" : "bg-purple-500/10"} rounded-full blur-[100px] animate-pulse`} style={{ animationDelay: "1s" }} />
       </div>
 
       {/* Navigation */}
@@ -38,14 +40,32 @@ export default function Home() {
             TenkiSense
           </span>
         </Link>
-        <div className="flex items-center gap-4">
-          <Link href="/about" className="flex items-center gap-2 px-4 py-2 text-neutral-300 hover:text-white transition-colors">
+
+        <div className="flex items-center gap-3">
+          {/* Language Toggle */}
+          <button
+            onClick={() => setLanguage(language === "en" ? "ja" : "en")}
+            className={`flex items-center gap-2 px-3 py-2 rounded-xl ${theme === "dark" ? "bg-white/5 border-white/10" : "bg-white border-gray-200"} border transition-all`}
+          >
+            <Languages className="w-4 h-4" />
+            <span className="text-sm font-medium">{language === "en" ? "EN" : "日本語"}</span>
+          </button>
+
+          {/* Theme Toggle */}
+          <button
+            onClick={toggleTheme}
+            className={`p-2 rounded-xl ${theme === "dark" ? "bg-white/5 border-white/10" : "bg-white border-gray-200"} border transition-all`}
+          >
+            {theme === "dark" ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
+          </button>
+
+          <Link href="/about" className={`flex items-center gap-2 px-4 py-2 ${mutedClass} hover:${textClass} transition-colors`}>
             <Info className="w-4 h-4" />
-            About
+            {t("nav.about")}
           </Link>
-          <Link href="/chat" className="flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-blue-600 to-purple-600 rounded-full hover:from-blue-500 hover:to-purple-500 transition-all shadow-lg shadow-purple-500/20">
+          <Link href="/chat" className="flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-blue-600 to-purple-600 rounded-full text-white hover:from-blue-500 hover:to-purple-500 transition-all shadow-lg shadow-purple-500/20">
             <MessageCircle className="w-4 h-4" />
-            Start Chat
+            {t("nav.chat")}
           </Link>
         </div>
       </nav>
@@ -53,31 +73,31 @@ export default function Home() {
       {/* Hero Section */}
       <section className="relative z-10 max-w-7xl mx-auto px-6 pt-20 pb-32 text-center">
         <div className="flex justify-center mb-6">
-          <div className="flex items-center gap-2 px-4 py-2 bg-white/5 border border-white/10 rounded-full text-sm text-neutral-400">
+          <div className={`flex items-center gap-2 px-4 py-2 ${theme === "dark" ? "bg-white/5 border-white/10" : "bg-white border-gray-200"} border rounded-full text-sm ${mutedClass}`}>
             <Sparkles className="w-4 h-4 text-yellow-400" />
-            AI-Powered Travel Weather Assistant
+            {t("home.badge")}
           </div>
         </div>
 
         <h1 className="text-5xl md:text-7xl font-bold mb-6 leading-tight">
-          Your Smart Weather
+          {t("home.title1")}
           <br />
           <span className="bg-gradient-to-r from-blue-400 via-purple-400 to-cyan-400 bg-clip-text text-transparent">
-            Travel Companion
+            {t("home.title2")}
           </span>
         </h1>
 
-        <p className="text-xl text-neutral-400 max-w-2xl mx-auto mb-10">
-          Get real-time weather, clothing advice, and activity suggestions for 100+ cities across Japan and India. Just ask naturally!
+        <p className={`text-xl ${mutedClass} max-w-2xl mx-auto mb-10`}>
+          {t("home.subtitle")}
         </p>
 
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
-          <Link href="/chat" className="inline-flex items-center justify-center gap-2 px-8 py-4 bg-gradient-to-r from-blue-600 to-purple-600 rounded-2xl text-lg font-semibold hover:from-blue-500 hover:to-purple-500 transition-all shadow-xl shadow-purple-500/30 hover:shadow-purple-500/50 hover:scale-105">
+          <Link href="/chat" className="inline-flex items-center justify-center gap-2 px-8 py-4 bg-gradient-to-r from-blue-600 to-purple-600 rounded-2xl text-lg font-semibold text-white hover:from-blue-500 hover:to-purple-500 transition-all shadow-xl shadow-purple-500/30 hover:shadow-purple-500/50 hover:scale-105">
             <MessageCircle className="w-5 h-5" />
-            Start Chatting
+            {t("home.cta")}
           </Link>
-          <Link href="/about" className="inline-flex items-center justify-center gap-2 px-8 py-4 bg-white/5 border border-white/10 rounded-2xl text-lg font-semibold hover:bg-white/10 transition-all">
-            Learn More
+          <Link href="/about" className={`inline-flex items-center justify-center gap-2 px-8 py-4 ${theme === "dark" ? "bg-white/5 border-white/10" : "bg-white border-gray-200"} border rounded-2xl text-lg font-semibold hover:bg-opacity-80 transition-all`}>
+            {t("home.learn")}
           </Link>
         </div>
       </section>
@@ -85,18 +105,18 @@ export default function Home() {
       {/* Features Grid */}
       <section className="relative z-10 max-w-7xl mx-auto px-6 pb-24">
         <h2 className="text-3xl font-bold text-center mb-12">
-          Everything You Need for
-          <span className="bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent"> Smart Travel</span>
+          {t("home.features")}
+          <span className="bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent"> {t("home.smart")}</span>
         </h2>
 
         <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
           {features.map((feature, i) => (
-            <div key={i} className="p-6 bg-white/5 border border-white/10 rounded-2xl hover:bg-white/10 transition-all group">
+            <div key={i} className={`p-6 ${cardClass} border rounded-2xl transition-all group`}>
               <div className="w-12 h-12 flex items-center justify-center bg-gradient-to-br from-blue-500/20 to-purple-500/20 rounded-xl mb-4 text-blue-400 group-hover:scale-110 transition-transform">
                 {feature.icon}
               </div>
               <h3 className="text-lg font-semibold mb-2">{feature.title}</h3>
-              <p className="text-neutral-400 text-sm">{feature.desc}</p>
+              <p className={`${mutedClass} text-sm`}>{feature.desc}</p>
             </div>
           ))}
         </div>
@@ -104,17 +124,15 @@ export default function Home() {
 
       {/* Example Queries */}
       <section className="relative z-10 max-w-7xl mx-auto px-6 pb-24">
-        <h2 className="text-3xl font-bold text-center mb-4">
-          Try Asking
-        </h2>
-        <p className="text-neutral-400 text-center mb-8">Click any query to start chatting</p>
+        <h2 className="text-3xl font-bold text-center mb-4">{t("home.try")}</h2>
+        <p className={`${mutedClass} text-center mb-8`}>{t("home.click")}</p>
 
         <div className="flex flex-wrap justify-center gap-3">
           {exampleQueries.map((query, i) => (
             <Link
               key={i}
               href={`/chat?q=${encodeURIComponent(query)}`}
-              className="px-5 py-3 bg-white/5 border border-white/10 rounded-full hover:bg-gradient-to-r hover:from-blue-500/20 hover:to-purple-500/20 hover:border-purple-500/30 transition-all text-neutral-300 hover:text-white"
+              className={`px-5 py-3 ${cardClass} border rounded-full transition-all hover:border-purple-500/30`}
             >
               {query}
             </Link>
@@ -125,28 +143,28 @@ export default function Home() {
       {/* Coverage Section */}
       <section className="relative z-10 max-w-7xl mx-auto px-6 pb-24">
         <div className="grid md:grid-cols-2 gap-8">
-          <div className="p-8 bg-gradient-to-br from-blue-500/10 to-blue-500/5 border border-blue-500/20 rounded-3xl">
+          <div className={`p-8 bg-gradient-to-br ${theme === "dark" ? "from-blue-500/10 to-blue-500/5 border-blue-500/20" : "from-blue-100 to-blue-50 border-blue-200"} border rounded-3xl`}>
             <div className="flex items-center gap-3 mb-4">
               <MapPin className="w-6 h-6 text-blue-400" />
               <h3 className="text-2xl font-bold">Japan</h3>
             </div>
-            <p className="text-neutral-400 mb-4">20+ major cities and popular districts</p>
+            <p className={`${mutedClass} mb-4`}>20+ major cities and popular districts</p>
             <div className="flex flex-wrap gap-2">
               {["Tokyo", "Osaka", "Kyoto", "Yokohama", "Sapporo", "Fukuoka", "Shibuya", "Shinjuku"].map(city => (
-                <span key={city} className="px-3 py-1 bg-blue-500/10 border border-blue-500/20 rounded-full text-sm text-blue-300">{city}</span>
+                <span key={city} className={`px-3 py-1 ${theme === "dark" ? "bg-blue-500/10 border-blue-500/20 text-blue-300" : "bg-blue-100 border-blue-200 text-blue-700"} border rounded-full text-sm`}>{city}</span>
               ))}
             </div>
           </div>
 
-          <div className="p-8 bg-gradient-to-br from-purple-500/10 to-purple-500/5 border border-purple-500/20 rounded-3xl">
+          <div className={`p-8 bg-gradient-to-br ${theme === "dark" ? "from-purple-500/10 to-purple-500/5 border-purple-500/20" : "from-purple-100 to-purple-50 border-purple-200"} border rounded-3xl`}>
             <div className="flex items-center gap-3 mb-4">
               <MapPin className="w-6 h-6 text-purple-400" />
               <h3 className="text-2xl font-bold">India</h3>
             </div>
-            <p className="text-neutral-400 mb-4">60+ cities from metros to hill stations</p>
+            <p className={`${mutedClass} mb-4`}>60+ cities from metros to hill stations</p>
             <div className="flex flex-wrap gap-2">
               {["Mumbai", "Delhi", "Bangalore", "Jaipur", "Goa", "Kashmir", "Manali", "Varanasi"].map(city => (
-                <span key={city} className="px-3 py-1 bg-purple-500/10 border border-purple-500/20 rounded-full text-sm text-purple-300">{city}</span>
+                <span key={city} className={`px-3 py-1 ${theme === "dark" ? "bg-purple-500/10 border-purple-500/20 text-purple-300" : "bg-purple-100 border-purple-200 text-purple-700"} border rounded-full text-sm`}>{city}</span>
               ))}
             </div>
           </div>
@@ -154,16 +172,16 @@ export default function Home() {
       </section>
 
       {/* Footer */}
-      <footer className="relative z-10 border-t border-white/5 py-8">
+      <footer className={`relative z-10 border-t ${theme === "dark" ? "border-white/5" : "border-gray-200"} py-8`}>
         <div className="max-w-7xl mx-auto px-6 flex flex-col md:flex-row items-center justify-between gap-4">
-          <div className="flex items-center gap-2 text-neutral-500">
+          <div className={`flex items-center gap-2 ${mutedClass}`}>
             <Cloud className="w-5 h-5" />
             <span>TenkiSense © 2026</span>
           </div>
-          <div className="flex items-center gap-6 text-sm text-neutral-500">
+          <div className={`flex items-center gap-6 text-sm ${mutedClass}`}>
             <span>Powered by Cohere AI & OpenWeather</span>
-            <Link href="/about" className="hover:text-white transition-colors">About</Link>
-            <Link href="/chat" className="hover:text-white transition-colors">Chat</Link>
+            <Link href="/about" className={`hover:${textClass} transition-colors`}>{t("nav.about")}</Link>
+            <Link href="/chat" className={`hover:${textClass} transition-colors`}>{t("nav.chat")}</Link>
           </div>
         </div>
       </footer>
