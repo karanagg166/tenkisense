@@ -1,8 +1,8 @@
 // Session management service for context preservation
+import { Message as BaseMessage, Session as BaseSession } from "@/types";
 
-export interface Message {
-    role: "user" | "assistant";
-    content: string;
+// Extended message with additional session-specific fields
+export interface Message extends Omit<BaseMessage, 'weather'> {
     timestamp: number;
     weatherCity?: string;
 }

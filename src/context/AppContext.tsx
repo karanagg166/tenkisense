@@ -1,16 +1,6 @@
 "use client";
 import { createContext, useContext, useState, useEffect, ReactNode } from "react";
-
-type Theme = "dark" | "light";
-type Language = "en" | "ja";
-
-interface AppContextType {
-    theme: Theme;
-    language: Language;
-    toggleTheme: () => void;
-    setLanguage: (lang: Language) => void;
-    t: (key: string) => string;
-}
+import { Theme, Language, AppContextType } from "@/types";
 
 const translations: Record<Language, Record<string, string>> = {
     en: {

@@ -1,21 +1,7 @@
 // Weather data caching service with 15-minute TTL
+import { WeatherData, CachedWeather } from "@/types";
 
-interface CachedWeather {
-    data: WeatherData;
-    timestamp: number;
-}
-
-export interface WeatherData {
-    name: string;
-    country: string;
-    temp: number;
-    feelsLike: number;
-    humidity: number;
-    windSpeed: number;
-    description: string;
-    icon: string;
-    main: string;
-}
+export type { WeatherData };
 
 const CACHE_TTL = 15 * 60 * 1000; // 15 minutes
 const weatherCache = new Map<string, CachedWeather>();

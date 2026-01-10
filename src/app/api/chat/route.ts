@@ -126,11 +126,15 @@ CURRENT WEATHER DATA for ${weather.city}, ${weather.country}:
 
 USER QUERY: "${message}"
 
-Based on the weather data above, respond helpfully to the user's query. 
-If they ask about activities, suggest weather-appropriate activities.
-If they ask about clothing/packing, give specific advice based on the temperature.
-If they just ask about weather, describe it naturally.
-Keep your response conversational and helpful, 2-4 sentences.`;
+Provide a helpful, medium-length response (4-6 sentences). Format your response with:
+• Start with a brief weather summary
+• Use bullet points (•) for key recommendations
+• Include 3-4 specific tips or suggestions
+• End with a friendly closing remark
+
+If they ask about activities, suggest 3-4 weather-appropriate activities.
+If they ask about clothing/packing, give specific outfit recommendations.
+If they just ask about weather, describe conditions and what it means for their day.`;
 
                 console.log("☀️ Weather fetched:", weather.temp + "°C", weather.description);
             } else {
@@ -149,11 +153,10 @@ ${langInstruction}
 
 USER MESSAGE: "${message}"
 
-Respond naturally and helpfully. 
-- If it's a greeting, greet them warmly and mention you can help with weather/travel.
-- If they ask about travel or weather without a city, ask which city they're interested in.
-- For other questions, be helpful and conversational.
-Keep your response concise, 1-3 sentences.`;
+Provide a helpful, medium-length response (3-5 sentences). Format with bullet points (•) when listing options.
+- If it's a greeting, greet them warmly and list 3 things you can help with.
+- If they ask about travel or weather without a city, ask which city and suggest some popular ones.
+- For other questions, be helpful and provide useful information with examples.`;
         }
 
         console.log("🤖 Calling Cohere...");

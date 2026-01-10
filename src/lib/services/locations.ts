@@ -1,12 +1,7 @@
 // Comprehensive location database for Japan and India
+import { LocationInfo } from "@/types";
 
-export interface LocationInfo {
-    city: string;
-    country: string;
-    countryCode: string;
-    aliases: string[];
-    districts?: string[];
-}
+export type { LocationInfo };
 
 // Japan Cities with Districts
 export const JAPAN_LOCATIONS: LocationInfo[] = [
