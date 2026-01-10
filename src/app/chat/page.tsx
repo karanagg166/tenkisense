@@ -45,18 +45,29 @@ function ChatContent() {
     const initialQuery = searchParams.get("q");
     const { theme, language, t } = useApp();
 
-    const [messages, setMessages] = useState<Message[]>([
-        {
-            role: "assistant",
-            content: t("chat.welcome")
-        }
-    ]);
+    const [messages, setMessages] = useState<Message[]>([]);
     const [input, setInput] = useState("");
     const [loading, setLoading] = useState(false);
     const [isRecording, setIsRecording] = useState(false);
     const messagesEndRef = useRef<HTMLDivElement>(null);
     const recognitionRef = useRef<any>(null);
     const hasSentInitial = useRef(false);
+    const hasSetWelcome = useRef(false);
+
+    // Set welcome message when language changes (only if no user messages yet)
+    useEffect(() => {
+        if (messages.length === 0 || (messages.length === 1 && messages[0].role === "assistant" && !hasSetWelcome.current)) {
+            setMessages([{ role: "assistant", content: t("chat.welcome") }]);
+            hasSetWelcome.current = true;
+        }
+    }, []);
+
+    // Update welcome message when language changes
+    useEffect(() => {
+        if (messages.length === 1 && messages[0].role === "assistant") {
+            setMessages([{ role: "assistant", content: t("chat.welcome") }]);
+        }
+    }, [language]);
 
     const bgClass = theme === "dark" ? "bg-[#0a0a0f]" : "bg-gray-50";
     const textClass = theme === "dark" ? "text-white" : "text-gray-900";
