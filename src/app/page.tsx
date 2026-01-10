@@ -110,9 +110,9 @@ export default function Home() {
           <div className={`p-8 bg-gradient-to-br ${theme === "dark" ? "from-blue-500/10 to-blue-500/5 border-blue-500/20" : "from-blue-100 to-blue-50 border-blue-200"} border rounded-3xl`}>
             <div className="flex items-center gap-3 mb-4">
               <MapPin className="w-6 h-6 text-blue-400" />
-              <h3 className="text-2xl font-bold">Japan</h3>
+              <h3 className="text-2xl font-bold">{t("home.japan")}</h3>
             </div>
-            <p className={`${mutedClass} mb-4`}>20+ major cities and popular districts</p>
+            <p className={`${mutedClass} mb-4`}>{t("home.japan.desc")}</p>
             <div className="flex flex-wrap gap-2">
               {["Tokyo", "Osaka", "Kyoto", "Yokohama", "Sapporo", "Fukuoka", "Shibuya", "Shinjuku"].map(city => (
                 <span key={city} className={`px-3 py-1 ${theme === "dark" ? "bg-blue-500/10 border-blue-500/20 text-blue-300" : "bg-blue-100 border-blue-200 text-blue-700"} border rounded-full text-sm`}>{city}</span>
@@ -123,9 +123,9 @@ export default function Home() {
           <div className={`p-8 bg-gradient-to-br ${theme === "dark" ? "from-purple-500/10 to-purple-500/5 border-purple-500/20" : "from-purple-100 to-purple-50 border-purple-200"} border rounded-3xl`}>
             <div className="flex items-center gap-3 mb-4">
               <MapPin className="w-6 h-6 text-purple-400" />
-              <h3 className="text-2xl font-bold">India</h3>
+              <h3 className="text-2xl font-bold">{t("home.india")}</h3>
             </div>
-            <p className={`${mutedClass} mb-4`}>60+ cities from metros to hill stations</p>
+            <p className={`${mutedClass} mb-4`}>{t("home.india.desc")}</p>
             <div className="flex flex-wrap gap-2">
               {["Mumbai", "Delhi", "Bangalore", "Jaipur", "Goa", "Kashmir", "Manali", "Varanasi"].map(city => (
                 <span key={city} className={`px-3 py-1 ${theme === "dark" ? "bg-purple-500/10 border-purple-500/20 text-purple-300" : "bg-purple-100 border-purple-200 text-purple-700"} border rounded-full text-sm`}>{city}</span>
@@ -143,7 +143,7 @@ export default function Home() {
             <span>TenkiSense © 2026</span>
           </div>
           <div className={`flex items-center gap-6 text-sm ${mutedClass}`}>
-            <span>Powered by Cohere AI & OpenWeather</span>
+            <span>{t("home.footer.powered")}</span>
             <Link href="/about" className="hover:opacity-80 transition-colors">{t("nav.about")}</Link>
             <Link href="/chat" className="hover:opacity-80 transition-colors">{t("nav.chat")}</Link>
           </div>

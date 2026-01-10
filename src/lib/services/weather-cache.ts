@@ -80,6 +80,7 @@ export async function fetchWeatherWithCache(city: string): Promise<WeatherData |
 
         const data: WeatherData = {
             name: raw.name,
+            city: raw.name,
             country: raw.sys.country,
             temp: Math.round(raw.main.temp),
             feelsLike: Math.round(raw.main.feels_like),

@@ -56,6 +56,13 @@ const translations: Record<Language, Record<string, string>> = {
         "about.ai.desc": "Smart responses using Cohere",
         "about.friendly": "User Friendly",
         "about.friendly.desc": "Natural language understanding",
+
+        // Home - Coverage
+        "home.japan": "Japan",
+        "home.japan.desc": "20+ major cities and popular districts",
+        "home.india": "India",
+        "home.india.desc": "60+ cities from metros to hill stations",
+        "home.footer.powered": "Powered by Cohere AI & OpenWeather",
     },
     ja: {
         // Navigation
@@ -110,6 +117,13 @@ const translations: Record<Language, Record<string, string>> = {
         "about.ai.desc": "Cohereによるスマートな応答",
         "about.friendly": "ユーザーフレンドリー",
         "about.friendly.desc": "自然言語理解",
+
+        // Home - Coverage
+        "home.japan": "日本",
+        "home.japan.desc": "20以上の主要都市と人気地区",
+        "home.india": "インド",
+        "home.india.desc": "大都市から丘陵地帯まで60以上の都市",
+        "home.footer.powered": "Cohere AI & OpenWeatherによる提供",
     }
 };
 
