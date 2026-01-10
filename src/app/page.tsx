@@ -106,29 +106,50 @@ export default function Home() {
 
       {/* Coverage Section */}
       <section className="relative z-10 max-w-7xl mx-auto px-6 pb-24">
-        <div className="grid md:grid-cols-2 gap-8">
-          <div className={`p-8 bg-gradient-to-br ${theme === "dark" ? "from-blue-500/10 to-blue-500/5 border-blue-500/20" : "from-blue-100 to-blue-50 border-blue-200"} border rounded-3xl`}>
-            <div className="flex items-center gap-3 mb-4">
-              <MapPin className="w-6 h-6 text-blue-400" />
-              <h3 className="text-2xl font-bold">{t("home.japan")}</h3>
+        <h2 className="text-3xl font-bold text-center mb-8">
+          🌍 {t("home.worldwide")}
+        </h2>
+        <p className={`${mutedClass} text-center mb-8`}>{t("home.worldwide.desc")}</p>
+
+        <div className="grid md:grid-cols-3 gap-6">
+          {/* Asia */}
+          <div className={`p-6 bg-gradient-to-br ${theme === "dark" ? "from-blue-500/10 to-blue-500/5 border-blue-500/20" : "from-blue-100 to-blue-50 border-blue-200"} border rounded-2xl`}>
+            <div className="flex items-center gap-3 mb-3">
+              <MapPin className="w-5 h-5 text-blue-400" />
+              <h3 className="text-xl font-bold">{t("home.asia")}</h3>
             </div>
-            <p className={`${mutedClass} mb-4`}>{t("home.japan.desc")}</p>
+            <p className={`${mutedClass} text-sm mb-3`}>{t("home.asia.desc")}</p>
             <div className="flex flex-wrap gap-2">
-              {["Tokyo", "Osaka", "Kyoto", "Yokohama", "Sapporo", "Fukuoka", "Shibuya", "Shinjuku"].map(city => (
-                <span key={city} className={`px-3 py-1 ${theme === "dark" ? "bg-blue-500/10 border-blue-500/20 text-blue-300" : "bg-blue-100 border-blue-200 text-blue-700"} border rounded-full text-sm`}>{city}</span>
+              {["Tokyo", "Mumbai", "Bangkok", "Singapore", "Dubai", "Seoul"].map(city => (
+                <span key={city} className={`px-2 py-1 ${theme === "dark" ? "bg-blue-500/10 border-blue-500/20 text-blue-300" : "bg-blue-100 border-blue-200 text-blue-700"} border rounded-full text-xs`}>{city}</span>
               ))}
             </div>
           </div>
 
-          <div className={`p-8 bg-gradient-to-br ${theme === "dark" ? "from-purple-500/10 to-purple-500/5 border-purple-500/20" : "from-purple-100 to-purple-50 border-purple-200"} border rounded-3xl`}>
-            <div className="flex items-center gap-3 mb-4">
-              <MapPin className="w-6 h-6 text-purple-400" />
-              <h3 className="text-2xl font-bold">{t("home.india")}</h3>
+          {/* Europe */}
+          <div className={`p-6 bg-gradient-to-br ${theme === "dark" ? "from-purple-500/10 to-purple-500/5 border-purple-500/20" : "from-purple-100 to-purple-50 border-purple-200"} border rounded-2xl`}>
+            <div className="flex items-center gap-3 mb-3">
+              <MapPin className="w-5 h-5 text-purple-400" />
+              <h3 className="text-xl font-bold">{t("home.europe")}</h3>
             </div>
-            <p className={`${mutedClass} mb-4`}>{t("home.india.desc")}</p>
+            <p className={`${mutedClass} text-sm mb-3`}>{t("home.europe.desc")}</p>
             <div className="flex flex-wrap gap-2">
-              {["Mumbai", "Delhi", "Bangalore", "Jaipur", "Goa", "Kashmir", "Manali", "Varanasi"].map(city => (
-                <span key={city} className={`px-3 py-1 ${theme === "dark" ? "bg-purple-500/10 border-purple-500/20 text-purple-300" : "bg-purple-100 border-purple-200 text-purple-700"} border rounded-full text-sm`}>{city}</span>
+              {["London", "Paris", "Rome", "Berlin", "Barcelona", "Amsterdam"].map(city => (
+                <span key={city} className={`px-2 py-1 ${theme === "dark" ? "bg-purple-500/10 border-purple-500/20 text-purple-300" : "bg-purple-100 border-purple-200 text-purple-700"} border rounded-full text-xs`}>{city}</span>
+              ))}
+            </div>
+          </div>
+
+          {/* Americas */}
+          <div className={`p-6 bg-gradient-to-br ${theme === "dark" ? "from-cyan-500/10 to-cyan-500/5 border-cyan-500/20" : "from-cyan-100 to-cyan-50 border-cyan-200"} border rounded-2xl`}>
+            <div className="flex items-center gap-3 mb-3">
+              <MapPin className="w-5 h-5 text-cyan-400" />
+              <h3 className="text-xl font-bold">{t("home.americas")}</h3>
+            </div>
+            <p className={`${mutedClass} text-sm mb-3`}>{t("home.americas.desc")}</p>
+            <div className="flex flex-wrap gap-2">
+              {["New York", "Los Angeles", "Toronto", "Miami", "São Paulo", "Mexico City"].map(city => (
+                <span key={city} className={`px-2 py-1 ${theme === "dark" ? "bg-cyan-500/10 border-cyan-500/20 text-cyan-300" : "bg-cyan-100 border-cyan-200 text-cyan-700"} border rounded-full text-xs`}>{city}</span>
               ))}
             </div>
           </div>

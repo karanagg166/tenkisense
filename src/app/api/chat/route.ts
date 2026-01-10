@@ -1,47 +1,80 @@
 import { CohereClient } from "cohere-ai";
 import { NextRequest, NextResponse } from "next/server";
 
-// Known cities for better extraction
-const CITIES = [
-    // Japan
-    "tokyo", "osaka", "kyoto", "yokohama", "nagoya", "sapporo", "fukuoka", "kobe",
-    "hiroshima", "sendai", "nara", "kanazawa", "okinawa", "nikko", "hakone",
-    // India  
-    "mumbai", "delhi", "bangalore", "bengaluru", "chennai", "kolkata", "hyderabad",
-    "pune", "ahmedabad", "jaipur", "lucknow", "surat", "indore", "bhopal", "jabalpur",
-    "nagpur", "kochi", "goa", "varanasi", "agra", "amritsar", "udaipur", "jodhpur",
-    "shimla", "manali", "rishikesh", "dehradun", "darjeeling", "srinagar", "kashmir",
-    "leh", "ladakh", "mysore", "ooty", "kodaikanal", "pondicherry", "guwahati"
-];
+// Known cities map (English -> OpenWeather format)
+const KNOWN_CITIES: Record<string, string> = {
+    // Japanese cities with Japanese names
+    "東京": "Tokyo", "tokyo": "Tokyo", "とうきょう": "Tokyo",
+    "大阪": "Osaka", "osaka": "Osaka", "おおさか": "Osaka",
+    "京都": "Kyoto", "kyoto": "Kyoto", "きょうと": "Kyoto",
+    "横浜": "Yokohama", "yokohama": "Yokohama",
+    "名古屋": "Nagoya", "nagoya": "Nagoya",
+    "札幌": "Sapporo", "sapporo": "Sapporo",
+    "福岡": "Fukuoka", "fukuoka": "Fukuoka",
+    "神戸": "Kobe", "kobe": "Kobe",
+    "広島": "Hiroshima", "hiroshima": "Hiroshima",
+    "仙台": "Sendai", "sendai": "Sendai",
+    "沖縄": "Okinawa", "okinawa": "Okinawa",
+    // Indian cities
+    "mumbai": "Mumbai", "delhi": "Delhi", "bangalore": "Bangalore",
+    "chennai": "Chennai", "kolkata": "Kolkata", "hyderabad": "Hyderabad",
+    "pune": "Pune", "jaipur": "Jaipur", "goa": "Goa", "varanasi": "Varanasi",
+    // Major world cities
+    "london": "London", "paris": "Paris", "new york": "New York",
+    "los angeles": "Los Angeles", "dubai": "Dubai", "singapore": "Singapore",
+    "sydney": "Sydney", "berlin": "Berlin", "rome": "Rome", "amsterdam": "Amsterdam",
+    "toronto": "Toronto", "bangkok": "Bangkok", "seoul": "Seoul", "beijing": "Beijing",
+    "shanghai": "Shanghai", "moscow": "Moscow", "cairo": "Cairo", "barcelona": "Barcelona",
+};
 
-// Extract city from text
+// Extract city from text using pattern matching
 function extractCity(text: string): string | null {
     const lower = text.toLowerCase();
 
-    // Check for known cities first
-    for (const city of CITIES) {
-        if (lower.includes(city)) {
-            return city.charAt(0).toUpperCase() + city.slice(1);
+    // First check for known cities (including Japanese)
+    for (const [key, value] of Object.entries(KNOWN_CITIES)) {
+        if (text.includes(key) || lower.includes(key.toLowerCase())) {
+            return value;
         }
     }
 
-    // Pattern matching for unknown cities
+    // Common patterns to extract city names
     const patterns = [
-        /(?:weather|activities?|things to do|visit|travel|going|trip|in|at|for|to)\s+(?:in|to|at|for)?\s*([a-zA-Z]+)/i,
-        /([a-zA-Z]+)\s+(?:weather|temperature|forecast|activities?)/i,
+        // "weather in London", "weather of Paris"
+        /weather\s+(?:in|of|for|at)\s+([a-zA-Z][a-zA-Z\s]*?)(?:\?|$|,|\.|\!|\s+and|\s+or)/i,
+        // "London weather", "Paris temperature"
+        /([A-Z][a-zA-Z]+(?:\s+[A-Z][a-zA-Z]+)?)\s+(?:weather|temperature|forecast|climate)/i,
+        // "what to wear in Berlin"
+        /(?:wear|pack|bring|clothes?)\s+(?:in|to|for)\s+([a-zA-Z][a-zA-Z\s]*?)(?:\?|$|,|\.|\!)/i,
+        // "activities in Tokyo", "things to do in Dubai"
+        /(?:activities?|things?\s+to\s+do)\s+(?:in|at)\s+([a-zA-Z][a-zA-Z\s]*?)(?:\?|$|,|\.|\!)/i,
+        // "visit London", "traveling to Sydney", "trip to Paris"
+        /(?:visit(?:ing)?|travel(?:ling|ing)?(?:\s+to)?|going\s+to|trip\s+to)\s+([a-zA-Z][a-zA-Z\s]*?)(?:\?|$|,|\.|\!)/i,
+        // "in New York", "of Mumbai", "for Tokyo"
+        /(?:in|of|at|for|to)\s+([A-Z][a-zA-Z]+(?:\s+[A-Z][a-zA-Z]+)?)(?:\s|$|\?|,|\.|\!)/,
+        // City at start or end: "Tokyo please", "tell me about Paris"
+        /(?:about|tell\s+me\s+about)\s+([A-Z][a-zA-Z]+(?:\s+[A-Z][a-zA-Z]+)?)/i,
+        // Simple city name detection
+        /^([A-Z][a-zA-Z]+(?:\s+[A-Z][a-zA-Z]+)?)\s*(?:\?|$)/,
     ];
 
     for (const pattern of patterns) {
         const match = text.match(pattern);
-        if (match && match[1] && match[1].length > 2) {
-            return match[1].charAt(0).toUpperCase() + match[1].slice(1).toLowerCase();
+        if (match && match[1]) {
+            const extracted = match[1].trim();
+            // Filter out common words that aren't cities
+            const skipWords = ['weather', 'today', 'tomorrow', 'now', 'the', 'a', 'an', 'my', 'your', 'this', 'that', 'it', 'there', 'here', 'what', 'how', 'when', 'where', 'why', 'please', 'me', 'i', 'you', 'we'];
+            if (extracted.length > 2 && extracted.length < 50 && !skipWords.includes(extracted.toLowerCase())) {
+                // Capitalize properly
+                return extracted.split(' ').map(w => w.charAt(0).toUpperCase() + w.slice(1).toLowerCase()).join(' ');
+            }
         }
     }
 
     return null;
 }
 
-// Fetch weather from OpenWeather API
+// Fetch weather from OpenWeather API (supports all world cities)
 async function getWeather(city: string) {
     try {
         const apiKey = process.env.NEXT_PUBLIC_OPENWEATHER_API_KEY;
@@ -74,7 +107,7 @@ export async function POST(req: NextRequest) {
     try {
         const body = await req.json();
         const message = body.message?.trim();
-        const language = body.language || "en"; // Get language from request
+        const language = body.language || "en";
 
         if (!message) {
             return NextResponse.json({ error: "Message is required" }, { status: 400 });
@@ -114,7 +147,7 @@ export async function POST(req: NextRequest) {
                     icon: weather.icon
                 };
 
-                prompt = `You are TenkiSense, a helpful travel and weather assistant.
+                prompt = `You are TenkiSense, a helpful global travel and weather assistant.
 
 ${langInstruction}
 
@@ -139,7 +172,7 @@ If they just ask about weather, describe conditions and what it means for their 
                 console.log("☀️ Weather fetched:", weather.temp + "°C", weather.description);
             } else {
                 // City detected but weather fetch failed
-                prompt = `You are TenkiSense, a travel and weather assistant.
+                prompt = `You are TenkiSense, a global travel and weather assistant.
 ${langInstruction}
 The user asked: "${message}"
 I tried to get weather for "${city}" but couldn't find it. 
@@ -147,7 +180,7 @@ Apologize briefly and ask them to check the city name spelling. Keep it friendly
             }
         } else {
             // CASE 2: No city - Just normal conversation
-            prompt = `You are TenkiSense, a friendly travel and weather assistant specializing in Japan and India.
+            prompt = `You are TenkiSense, a friendly global travel and weather assistant supporting cities worldwide.
 
 ${langInstruction}
 
@@ -155,7 +188,7 @@ USER MESSAGE: "${message}"
 
 Provide a helpful, medium-length response (3-5 sentences). Format with bullet points (•) when listing options.
 - If it's a greeting, greet them warmly and list 3 things you can help with.
-- If they ask about travel or weather without a city, ask which city and suggest some popular ones.
+- If they ask about travel or weather without a city, ask which city and suggest some popular ones from different continents.
 - For other questions, be helpful and provide useful information with examples.`;
         }
 
