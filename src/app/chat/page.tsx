@@ -159,11 +159,9 @@ function ChatContent() {
         sendMessage();
     };
 
-    const suggestions = [
-        "Weather in Tokyo",
-        "What to wear in Mumbai?",
-        "Activities in Kyoto",
-    ];
+    const suggestions = language === "en"
+        ? ["Weather in Tokyo", "What to wear in Mumbai?", "Activities in Kyoto"]
+        : ["東京の天気", "ムンバイで何を着る？", "京都のアクティビティ"];
 
     return (
         <>
