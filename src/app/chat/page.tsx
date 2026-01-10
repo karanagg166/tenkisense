@@ -43,7 +43,7 @@ function WeatherCard({ weather }: { weather: Message["weather"] }) {
 function ChatContent() {
     const searchParams = useSearchParams();
     const initialQuery = searchParams.get("q");
-    const { theme, t } = useApp();
+    const { theme, language, t } = useApp();
 
     const [messages, setMessages] = useState<Message[]>([
         {
@@ -121,7 +121,7 @@ function ChatContent() {
             const res = await fetch("/api/chat", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ message: messageText }),
+                body: JSON.stringify({ message: messageText, language }),
             });
 
             const data = await res.json();
@@ -166,8 +166,8 @@ function ChatContent() {
                         <div className={`max-w-[85%]`}>
                             <div
                                 className={`px-4 py-3 rounded-2xl ${msg.role === "user"
-                                        ? "bg-gradient-to-r from-blue-600 to-blue-500 text-white rounded-br-md"
-                                        : `${cardClass} border ${textClass} rounded-bl-md backdrop-blur-sm`
+                                    ? "bg-gradient-to-r from-blue-600 to-blue-500 text-white rounded-br-md"
+                                    : `${cardClass} border ${textClass} rounded-bl-md backdrop-blur-sm`
                                     }`}
                             >
                                 <p className="whitespace-pre-wrap">{msg.content}</p>
@@ -223,8 +223,8 @@ function ChatContent() {
                         onClick={toggleRecording}
                         disabled={loading}
                         className={`p-3 rounded-xl transition-all ${isRecording
-                                ? "bg-red-500 text-white animate-pulse"
-                                : `${cardClass} border ${mutedClass} hover:opacity-80`
+                            ? "bg-red-500 text-white animate-pulse"
+                            : `${cardClass} border ${mutedClass} hover:opacity-80`
                             }`}
                     >
                         {isRecording ? <MicOff className="w-5 h-5" /> : <Mic className="w-5 h-5" />}

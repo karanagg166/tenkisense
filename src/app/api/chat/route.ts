@@ -74,6 +74,7 @@ export async function POST(req: NextRequest) {
     try {
         const body = await req.json();
         const message = body.message?.trim();
+        const language = body.language || "en"; // Get language from request
 
         if (!message) {
             return NextResponse.json({ error: "Message is required" }, { status: 400 });
@@ -84,7 +85,7 @@ export async function POST(req: NextRequest) {
             return NextResponse.json({ error: "COHERE_API_KEY not configured" }, { status: 500 });
         }
 
-        console.log("📝 Input:", message);
+        console.log("📝 Input:", message, "| Language:", language);
 
         // Try to extract city from the message
         const city = extractCity(message);
@@ -92,6 +93,11 @@ export async function POST(req: NextRequest) {
 
         // Initialize Cohere
         const cohere = new CohereClient({ token: apiKey });
+
+        // Language instruction
+        const langInstruction = language === "ja"
+            ? "IMPORTANT: You MUST respond entirely in Japanese (日本語). Use natural, polite Japanese."
+            : "Respond in English.";
 
         let prompt: string;
         let weatherData = null;
@@ -109,6 +115,8 @@ export async function POST(req: NextRequest) {
                 };
 
                 prompt = `You are TenkiSense, a helpful travel and weather assistant.
+
+${langInstruction}
 
 CURRENT WEATHER DATA for ${weather.city}, ${weather.country}:
 - Temperature: ${weather.temp}°C (feels like ${weather.feelsLike}°C)
@@ -128,6 +136,7 @@ Keep your response conversational and helpful, 2-4 sentences.`;
             } else {
                 // City detected but weather fetch failed
                 prompt = `You are TenkiSense, a travel and weather assistant.
+${langInstruction}
 The user asked: "${message}"
 I tried to get weather for "${city}" but couldn't find it. 
 Apologize briefly and ask them to check the city name spelling. Keep it friendly.`;
@@ -135,6 +144,8 @@ Apologize briefly and ask them to check the city name spelling. Keep it friendly
         } else {
             // CASE 2: No city - Just normal conversation
             prompt = `You are TenkiSense, a friendly travel and weather assistant specializing in Japan and India.
+
+${langInstruction}
 
 USER MESSAGE: "${message}"
 
