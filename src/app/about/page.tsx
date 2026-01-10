@@ -1,5 +1,15 @@
 "use client";
-import { Heart, Zap, Shield, Globe, Github, Linkedin, Mail, Code, ExternalLink } from "lucide-react";
+import { Heart, Zap, Shield, Globe, Mail } from "lucide-react";
+import {
+    SiGithub,
+    SiLinkedin,
+    SiInstagram,
+    SiLeetcode,
+    SiCodeforces,
+    SiCodechef,
+    SiGeeksforgeeks,
+    SiX
+} from "react-icons/si";
 import { useApp } from "@/context/AppContext";
 import Header from "@/components/Header";
 
@@ -23,12 +33,16 @@ export default function AboutPage() {
     ];
 
     const socialLinks = [
-        { icon: <Github className="w-5 h-5" />, label: "GitHub", url: "https://github.com/karanagg166", color: "hover:text-white" },
-        { icon: <Linkedin className="w-5 h-5" />, label: "LinkedIn", url: "https://linkedin.com/in/karan-agarwal-9005b5257", color: "hover:text-blue-400" },
-        { icon: <Code className="w-5 h-5" />, label: "Codeforces", url: "https://codeforces.com/profile/karanagg166", color: "hover:text-red-400" },
-        { icon: <Code className="w-5 h-5" />, label: "LeetCode", url: "https://leetcode.com/karanagg166", color: "hover:text-yellow-400" },
-        { icon: <ExternalLink className="w-5 h-5" />, label: "Portfolio", url: "https://karanagg.vercel.app", color: "hover:text-purple-400" },
-        { icon: <Mail className="w-5 h-5" />, label: "Email", url: "mailto:karanagarwal1012@gmail.com", color: "hover:text-green-400" },
+        { icon: <SiGithub className="w-6 h-6" />, label: "GitHub", url: "https://github.com/karanagg166" },
+        { icon: <SiLinkedin className="w-6 h-6 text-blue-500" />, label: "LinkedIn", url: "https://www.linkedin.com/in/karan-aggarwal-a13427276/" },
+        { icon: <SiInstagram className="w-6 h-6 text-pink-500" />, label: "Instagram", url: "https://www.instagram.com/karanagg_166/" },
+        { icon: <SiX className="w-6 h-6" />, label: "X", url: "https://x.com/Karanaggrawal1" },
+        { icon: <Globe className="w-6 h-6 text-purple-400" />, label: "Portfolio", url: "https://portfolio-kappa-bay-76.vercel.app/" },
+        { icon: <Mail className="w-6 h-6 text-green-400" />, label: "Email", url: "mailto:aggarwalkaran241@gmail.com" },
+        { icon: <SiLeetcode className="w-6 h-6 text-yellow-500" />, label: "LeetCode", url: "https://leetcode.com/u/aggarwalkaran241/" },
+        { icon: <SiCodeforces className="w-6 h-6 text-blue-400" />, label: "Codeforces", url: "https://codeforces.com/profile/KaranCipherKnight" },
+        { icon: <SiCodechef className="w-6 h-6 text-amber-700" />, label: "CodeChef", url: "https://www.codechef.com/users/code_rush03" },
+        { icon: <SiGeeksforgeeks className="w-6 h-6 text-green-500" />, label: "GFG", url: "https://www.geeksforgeeks.org/profile/aggarwalkaran241" },
     ];
 
     const bgClass = theme === "dark" ? "bg-[#0a0a0f]" : "bg-gray-50";
@@ -115,30 +129,50 @@ export default function AboutPage() {
                     </div>
                 </div>
 
-                {/* Creator */}
-                <div className="text-center">
-                    <h2 className="text-2xl font-bold mb-6">{t("about.creator")}</h2>
-                    <div className={`inline-flex flex-col items-center p-8 ${cardClass} border rounded-3xl`}>
-                        <div className="w-24 h-24 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center text-4xl font-bold text-white mb-4">
-                            KA
-                        </div>
-                        <h3 className="text-2xl font-bold mb-1">{t("about.name")}</h3>
-                        <p className={`${mutedClass} mb-6`}>{t("about.role")}</p>
+                {/* Creator Section - BIGGER */}
+                <div className="mb-16">
+                    <h2 className="text-3xl font-bold text-center mb-8">{t("about.creator")}</h2>
+                    <div className={`${cardClass} border rounded-3xl overflow-hidden`}>
+                        {/* Photo Section */}
+                        <div className="flex flex-col md:flex-row">
+                            {/* Profile Image */}
+                            <div className="md:w-1/3 p-6 flex items-center justify-center">
+                                <div className="relative">
+                                    <div className="absolute inset-0 bg-gradient-to-br from-blue-500 to-purple-600 rounded-2xl blur-xl opacity-50" />
+                                    <img
+                                        src="/images/Snapchat-2013273476.jpg"
+                                        alt="Karan Aggarwal"
+                                        className="relative w-48 h-48 md:w-56 md:h-56 object-cover rounded-2xl border-4 border-white/10"
+                                    />
+                                </div>
+                            </div>
 
-                        {/* Social Links */}
-                        <div className="grid grid-cols-3 gap-3">
-                            {socialLinks.map((link, i) => (
-                                <a
-                                    key={i}
-                                    href={link.url}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className={`flex flex-col items-center gap-2 p-3 ${cardClass} border rounded-xl transition-all ${link.color}`}
-                                >
-                                    {link.icon}
-                                    <span className="text-xs">{link.label}</span>
-                                </a>
-                            ))}
+                            {/* Bio Section */}
+                            <div className="md:w-2/3 p-8">
+                                <h3 className="text-3xl font-bold mb-2">{t("about.name")}</h3>
+                                <p className="text-lg text-blue-400 mb-4">{t("about.role")}</p>
+
+                                <p className={`${mutedClass} mb-6 text-base leading-relaxed`}>
+                                    {t("about.bio")}
+                                </p>
+
+                                {/* Social Links Grid */}
+                                <div className="grid grid-cols-5 gap-3">
+                                    {socialLinks.map((link, i) => (
+                                        <a
+                                            key={i}
+                                            href={link.url}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className={`flex flex-col items-center gap-2 p-3 ${theme === "dark" ? "bg-white/5 hover:bg-white/10" : "bg-gray-100 hover:bg-gray-200"} rounded-xl transition-all hover:scale-110`}
+                                            title={link.label}
+                                        >
+                                            {link.icon}
+                                            <span className="text-xs hidden sm:block">{link.label}</span>
+                                        </a>
+                                    ))}
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -146,7 +180,7 @@ export default function AboutPage() {
 
             {/* Footer */}
             <footer className={`relative z-10 border-t ${theme === "dark" ? "border-white/5" : "border-gray-200"} py-6 text-center text-sm ${mutedClass}`}>
-                TenkiSense © 2026 — {t("about.footer")}
+                TenkiSense © 2026 — {t("about.footer")} | {t("about.madeBy")}
             </footer>
         </div>
     );
