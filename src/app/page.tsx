@@ -1,10 +1,11 @@
 "use client";
 import Link from "next/link";
-import { Cloud, MessageCircle, Info, Sparkles, MapPin, Shirt, Plane, Sun, Moon, Languages } from "lucide-react";
+import { Cloud, MessageCircle, Sparkles, MapPin, Shirt, Plane, Sun } from "lucide-react";
 import { useApp } from "@/context/AppContext";
+import Header from "@/components/Header";
 
 export default function Home() {
-  const { theme, language, toggleTheme, setLanguage, t } = useApp();
+  const { theme, language, t } = useApp();
 
   const features = [
     { icon: <Sun className="w-6 h-6" />, title: t("feature.weather"), desc: t("feature.weather.desc") },
@@ -30,45 +31,8 @@ export default function Home() {
         <div className={`absolute bottom-0 right-1/4 w-[500px] h-[500px] ${theme === "dark" ? "bg-purple-500/20" : "bg-purple-500/10"} rounded-full blur-[100px] animate-pulse`} style={{ animationDelay: "1s" }} />
       </div>
 
-      {/* Navigation */}
-      <nav className="relative z-20 flex items-center justify-between px-6 py-4 max-w-7xl mx-auto">
-        <Link href="/" className="flex items-center gap-2">
-          <div className="p-2 rounded-xl bg-gradient-to-br from-blue-500 to-purple-600">
-            <Cloud className="w-6 h-6 text-white" />
-          </div>
-          <span className="text-xl font-bold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
-            TenkiSense
-          </span>
-        </Link>
-
-        <div className="flex items-center gap-3">
-          {/* Language Toggle */}
-          <button
-            onClick={() => setLanguage(language === "en" ? "ja" : "en")}
-            className={`flex items-center gap-2 px-3 py-2 rounded-xl ${theme === "dark" ? "bg-white/5 border-white/10" : "bg-white border-gray-200"} border transition-all`}
-          >
-            <Languages className="w-4 h-4" />
-            <span className="text-sm font-medium">{language === "en" ? "EN" : "日本語"}</span>
-          </button>
-
-          {/* Theme Toggle */}
-          <button
-            onClick={toggleTheme}
-            className={`p-2 rounded-xl ${theme === "dark" ? "bg-white/5 border-white/10" : "bg-white border-gray-200"} border transition-all`}
-          >
-            {theme === "dark" ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
-          </button>
-
-          <Link href="/about" className={`flex items-center gap-2 px-4 py-2 ${mutedClass} hover:${textClass} transition-colors`}>
-            <Info className="w-4 h-4" />
-            {t("nav.about")}
-          </Link>
-          <Link href="/chat" className="flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-blue-600 to-purple-600 rounded-full text-white hover:from-blue-500 hover:to-purple-500 transition-all shadow-lg shadow-purple-500/20">
-            <MessageCircle className="w-4 h-4" />
-            {t("nav.chat")}
-          </Link>
-        </div>
-      </nav>
+      {/* Shared Header */}
+      <Header />
 
       {/* Hero Section */}
       <section className="relative z-10 max-w-7xl mx-auto px-6 pt-20 pb-32 text-center">
@@ -180,8 +144,8 @@ export default function Home() {
           </div>
           <div className={`flex items-center gap-6 text-sm ${mutedClass}`}>
             <span>Powered by Cohere AI & OpenWeather</span>
-            <Link href="/about" className={`hover:${textClass} transition-colors`}>{t("nav.about")}</Link>
-            <Link href="/chat" className={`hover:${textClass} transition-colors`}>{t("nav.chat")}</Link>
+            <Link href="/about" className="hover:opacity-80 transition-colors">{t("nav.about")}</Link>
+            <Link href="/chat" className="hover:opacity-80 transition-colors">{t("nav.chat")}</Link>
           </div>
         </div>
       </footer>

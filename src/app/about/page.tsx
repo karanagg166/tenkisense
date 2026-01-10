@@ -1,10 +1,10 @@
 "use client";
-import Link from "next/link";
-import { Cloud, MessageCircle, ArrowLeft, Github, Linkedin, Mail, Heart, Zap, Shield, Globe, Moon, Sun, Languages, Code, ExternalLink } from "lucide-react";
+import { Heart, Zap, Shield, Globe, Github, Linkedin, Mail, Code, ExternalLink } from "lucide-react";
 import { useApp } from "@/context/AppContext";
+import Header from "@/components/Header";
 
 export default function AboutPage() {
-    const { theme, language, toggleTheme, setLanguage, t } = useApp();
+    const { theme, t } = useApp();
 
     const techStack = [
         { name: "Next.js 16", desc: "React Framework" },
@@ -44,37 +44,8 @@ export default function AboutPage() {
                 <div className={`absolute bottom-0 right-1/4 w-[400px] h-[400px] ${theme === "dark" ? "bg-purple-500/10" : "bg-purple-500/5"} rounded-full blur-[80px]`} />
             </div>
 
-            {/* Navigation */}
-            <nav className="relative z-20 flex items-center justify-between px-6 py-4 max-w-5xl mx-auto">
-                <Link href="/" className={`flex items-center gap-2 ${mutedClass} hover:${textClass} transition-colors`}>
-                    <ArrowLeft className="w-5 h-5" />
-                    {t("nav.back")}
-                </Link>
-
-                <div className="flex items-center gap-3">
-                    {/* Language Toggle */}
-                    <button
-                        onClick={() => setLanguage(language === "en" ? "ja" : "en")}
-                        className={`flex items-center gap-2 px-3 py-2 rounded-xl ${cardClass} border transition-all`}
-                    >
-                        <Languages className="w-4 h-4" />
-                        <span className="text-sm font-medium">{language === "en" ? "EN" : "日本語"}</span>
-                    </button>
-
-                    {/* Theme Toggle */}
-                    <button
-                        onClick={toggleTheme}
-                        className={`p-2 rounded-xl ${cardClass} border transition-all`}
-                    >
-                        {theme === "dark" ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
-                    </button>
-                </div>
-
-                <Link href="/chat" className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-blue-600 to-purple-600 rounded-full text-sm text-white hover:from-blue-500 hover:to-purple-500 transition-all">
-                    <MessageCircle className="w-4 h-4" />
-                    {t("nav.chat")}
-                </Link>
-            </nav>
+            {/* Shared Header */}
+            <Header />
 
             {/* Content */}
             <main className="relative z-10 max-w-5xl mx-auto px-6 py-16">

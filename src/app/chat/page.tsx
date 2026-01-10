@@ -1,9 +1,10 @@
 "use client";
 import { useState, useRef, useEffect, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
-import Link from "next/link";
-import { Send, Mic, MicOff, Loader2, Cloud, ArrowLeft, Sparkles } from "lucide-react";
+import { Send, Mic, MicOff, Loader2 } from "lucide-react";
 import toast from "react-hot-toast";
+import { useApp } from "@/context/AppContext";
+import Header from "@/components/Header";
 
 interface Message {
     role: "user" | "assistant";
@@ -42,11 +43,12 @@ function WeatherCard({ weather }: { weather: Message["weather"] }) {
 function ChatContent() {
     const searchParams = useSearchParams();
     const initialQuery = searchParams.get("q");
+    const { theme, t } = useApp();
 
     const [messages, setMessages] = useState<Message[]>([
         {
             role: "assistant",
-            content: "Hey! 👋 I'm TenkiSense, your travel weather assistant. Ask me about weather, what to wear, or activities in any city in Japan or India!"
+            content: t("chat.welcome")
         }
     ]);
     const [input, setInput] = useState("");
@@ -56,11 +58,15 @@ function ChatContent() {
     const recognitionRef = useRef<any>(null);
     const hasSentInitial = useRef(false);
 
+    const bgClass = theme === "dark" ? "bg-[#0a0a0f]" : "bg-gray-50";
+    const textClass = theme === "dark" ? "text-white" : "text-gray-900";
+    const cardClass = theme === "dark" ? "bg-white/5 border-white/10" : "bg-white border-gray-200";
+    const mutedClass = theme === "dark" ? "text-neutral-400" : "text-gray-600";
+
     useEffect(() => {
         messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
     }, [messages]);
 
-    // Handle initial query from URL
     useEffect(() => {
         if (initialQuery && !hasSentInitial.current) {
             hasSentInitial.current = true;
@@ -161,7 +167,7 @@ function ChatContent() {
                             <div
                                 className={`px-4 py-3 rounded-2xl ${msg.role === "user"
                                         ? "bg-gradient-to-r from-blue-600 to-blue-500 text-white rounded-br-md"
-                                        : "bg-white/5 border border-white/10 text-neutral-100 rounded-bl-md backdrop-blur-sm"
+                                        : `${cardClass} border ${textClass} rounded-bl-md backdrop-blur-sm`
                                     }`}
                             >
                                 <p className="whitespace-pre-wrap">{msg.content}</p>
@@ -173,10 +179,10 @@ function ChatContent() {
 
                 {loading && (
                     <div className="flex justify-start">
-                        <div className="bg-white/5 border border-white/10 text-neutral-400 px-4 py-3 rounded-2xl rounded-bl-md backdrop-blur-sm">
+                        <div className={`${cardClass} border ${mutedClass} px-4 py-3 rounded-2xl rounded-bl-md backdrop-blur-sm`}>
                             <div className="flex items-center gap-2">
                                 <Loader2 className="w-4 h-4 animate-spin" />
-                                <span className="text-sm">Thinking...</span>
+                                <span className="text-sm">{t("chat.thinking")}</span>
                             </div>
                         </div>
                     </div>
@@ -192,7 +198,7 @@ function ChatContent() {
                             <button
                                 key={query}
                                 onClick={() => sendMessage(query)}
-                                className="px-4 py-2 text-sm bg-white/5 hover:bg-white/10 border border-white/10 rounded-full text-neutral-300 transition-all hover:border-purple-500/30"
+                                className={`px-4 py-2 text-sm ${cardClass} border rounded-full ${mutedClass} transition-all hover:border-purple-500/30`}
                             >
                                 {query}
                             </button>
@@ -202,14 +208,14 @@ function ChatContent() {
             )}
 
             {/* Input */}
-            <div className="relative z-10 max-w-3xl mx-auto w-full p-4 border-t border-white/5 bg-black/20 backdrop-blur-lg">
+            <div className={`relative z-10 max-w-3xl mx-auto w-full p-4 border-t ${theme === "dark" ? "border-white/5 bg-black/20" : "border-gray-200 bg-white/80"} backdrop-blur-lg`}>
                 <form onSubmit={handleSubmit} className="flex gap-2">
                     <input
                         type="text"
                         value={input}
                         onChange={(e) => setInput(e.target.value)}
-                        placeholder="Ask about weather, activities, packing..."
-                        className="flex-1 bg-white/5 text-white px-4 py-3 rounded-xl border border-white/10 focus:outline-none focus:border-blue-500/50 focus:ring-1 focus:ring-blue-500/30 placeholder-neutral-500 transition-all"
+                        placeholder={t("chat.placeholder")}
+                        className={`flex-1 ${cardClass} ${textClass} px-4 py-3 rounded-xl border focus:outline-none focus:border-blue-500/50 focus:ring-1 focus:ring-blue-500/30 placeholder-neutral-500 transition-all`}
                         disabled={loading}
                     />
                     <button
@@ -218,7 +224,7 @@ function ChatContent() {
                         disabled={loading}
                         className={`p-3 rounded-xl transition-all ${isRecording
                                 ? "bg-red-500 text-white animate-pulse"
-                                : "bg-white/5 text-neutral-400 hover:text-white border border-white/10 hover:border-white/20"
+                                : `${cardClass} border ${mutedClass} hover:opacity-80`
                             }`}
                     >
                         {isRecording ? <MicOff className="w-5 h-5" /> : <Mic className="w-5 h-5" />}
@@ -237,31 +243,20 @@ function ChatContent() {
 }
 
 export default function ChatPage() {
+    const { theme } = useApp();
+    const bgClass = theme === "dark" ? "bg-[#0a0a0f]" : "bg-gray-50";
+    const textClass = theme === "dark" ? "text-white" : "text-gray-900";
+
     return (
-        <div className="min-h-screen bg-[#0a0a0f] flex flex-col">
+        <div className={`min-h-screen ${bgClass} ${textClass} flex flex-col`}>
             {/* Animated Background */}
             <div className="fixed inset-0 pointer-events-none overflow-hidden">
-                <div className="absolute top-0 left-1/4 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl animate-pulse" />
-                <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-purple-500/10 rounded-full blur-3xl animate-pulse" style={{ animationDelay: "1s" }} />
+                <div className={`absolute top-0 left-1/4 w-96 h-96 ${theme === "dark" ? "bg-blue-500/10" : "bg-blue-500/5"} rounded-full blur-3xl animate-pulse`} />
+                <div className={`absolute bottom-0 right-1/4 w-96 h-96 ${theme === "dark" ? "bg-purple-500/10" : "bg-purple-500/5"} rounded-full blur-3xl animate-pulse`} style={{ animationDelay: "1s" }} />
             </div>
 
-            {/* Header */}
-            <div className="relative z-10 flex items-center justify-between px-4 py-3 border-b border-white/5 bg-black/20 backdrop-blur-lg">
-                <Link href="/" className="flex items-center gap-2 text-neutral-400 hover:text-white transition-colors">
-                    <ArrowLeft className="w-5 h-5" />
-                    <span className="hidden sm:inline">Back</span>
-                </Link>
-                <div className="flex items-center gap-2">
-                    <div className="p-1.5 rounded-lg bg-gradient-to-br from-blue-500 to-purple-600">
-                        <Cloud className="w-4 h-4 text-white" />
-                    </div>
-                    <span className="font-semibold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">TenkiSense</span>
-                </div>
-                <div className="flex items-center gap-1 text-xs text-neutral-500">
-                    <Sparkles className="w-3 h-3" />
-                    <span className="hidden sm:inline">AI Powered</span>
-                </div>
-            </div>
+            {/* Shared Header */}
+            <Header />
 
             <Suspense fallback={
                 <div className="flex-1 flex items-center justify-center">
