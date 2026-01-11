@@ -30,6 +30,53 @@ function WeatherCard({ weather }: { weather: Message["weather"] }) {
     );
 }
 
+// Color palette for bullet points
+const bulletColors = [
+    "text-blue-400",
+    "text-purple-400",
+    "text-cyan-400",
+    "text-pink-400",
+    "text-green-400",
+    "text-orange-400",
+    "text-yellow-400",
+];
+
+// Format AI response with colorful bullet points
+function ColorfulMessage({ content, theme }: { content: string; theme: string }) {
+    const lines = content.split('\n');
+
+    let colorIndex = 0;
+
+    return (
+        <div className="space-y-1">
+            {lines.map((line, i) => {
+                // Check if line is a bullet point
+                const isBullet = line.trim().startsWith('•') || line.trim().startsWith('-') || line.trim().startsWith('*');
+
+                if (isBullet) {
+                    const color = bulletColors[colorIndex % bulletColors.length];
+                    colorIndex++;
+                    const cleanLine = line.trim().replace(/^[•\-\*]\s*/, '');
+
+                    return (
+                        <div key={i} className="flex items-start gap-2">
+                            <span className={`${color} font-bold text-lg`}>•</span>
+                            <span className={theme === "dark" ? "text-neutral-200" : "text-gray-700"}>{cleanLine}</span>
+                        </div>
+                    );
+                }
+
+                // Regular line
+                return line.trim() ? (
+                    <p key={i} className="break-words">{line}</p>
+                ) : (
+                    <div key={i} className="h-2" />
+                );
+            })}
+        </div>
+    );
+}
+
 function ChatContent() {
     const searchParams = useSearchParams();
     const initialQuery = searchParams.get("q");
@@ -169,7 +216,11 @@ function ChatContent() {
                                     : `${cardClass} border ${textClass} rounded-bl-md backdrop-blur-sm`
                                     }`}
                             >
-                                <p className="whitespace-pre-wrap break-words">{msg.content}</p>
+                                {msg.role === "assistant" ? (
+                                    <ColorfulMessage content={msg.content} theme={theme} />
+                                ) : (
+                                    <p className="whitespace-pre-wrap break-words">{msg.content}</p>
+                                )}
                             </div>
                             {msg.weather && <WeatherCard weather={msg.weather} />}
                         </div>
